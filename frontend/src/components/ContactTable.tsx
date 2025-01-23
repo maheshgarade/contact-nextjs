@@ -1,10 +1,11 @@
+import { Contact } from '@/models/Contact';
 import React from 'react';
 
-const ContactTable: React.FC = () => {
-  const contacts = [
-    { id: 1, name: 'John Doe', phone: '1234567890', email: 'john@example.com', access: 'Admin' },
-    { id: 2, name: 'Jane Doe', phone: '0987654321', email: 'jane@example.com', access: 'User' },
-  ];
+interface ContactTableProps {
+  contacts: Contact[];
+}
+
+const ContactTable: React.FC<ContactTableProps> = ({ contacts }) => {
 
   return (
     <table border={1} style={{ width: '100%', marginTop: '1rem' }}>

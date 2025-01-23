@@ -1,11 +1,14 @@
+import { Contact } from '@/models/Contact';
 import ContactTable from '../components/ContactTable';
+import { getContacts } from '@/services/contactService';
 
-export default function Home() {
+export default async function Home() {
+  const contacts: Contact[] = await getContacts();
   return (
     <main>
       <div style={{ padding: '1rem' }}>
         <button>Add Contact</button>
-        <ContactTable />
+        <ContactTable contacts={contacts} />
       </div>
     </main>
   );
