@@ -2,7 +2,7 @@
 import { Contact } from '@/models/Contact';
 import { deleteContact } from '@/services/contactService';
 import React from 'react';
-import EditContactModal from './EditContactModal';
+import EditContactModal from '../../modals/EditContactModal/EditContactModal';
 import Image from 'next/image'
 
 interface ContactTableProps {

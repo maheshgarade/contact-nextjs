@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
-import { Contact } from '../models/Contact';
-import { updateContact } from '../services/contactService';
+import { Contact } from '../../../models/Contact';
+import { updateContact } from '../../../services/contactService';
 
 interface EditContactModalProps {
   contact: Contact;
