@@ -1,32 +1,47 @@
 'use client'
 import { Contact } from '@/models/Contact';
-import { deleteContact } from '@/services/contactService';
+import { addContact, deleteContact } from '@/services/contactService';
 import React from 'react';
 import EditContactModal from '../../modals/EditContactModal/EditContactModal';
 import Image from 'next/image'
+import AddContactModal from '@/components/modals/AddContactModal/AddContactModal';
 
 interface ContactTableProps {
   contacts: Contact[];
 }
 
-const ContactTable: React.FC<ContactTableProps> = ({ contacts }) => {
+const ContactTable: React.FC<ContactTableProps> = ({ contacts: initialContacts }) => {
   const [editingContact, setEditingContact] = React.useState<Contact | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState<boolean>(false);
+  const [contacts, setContacts] = React.useState<Contact[]>(initialContacts);
+  
 
   const handleEditClick = (contact: Contact) => {
     setEditingContact(contact);
   };
 
-  const handleDeleteClick = async (contactId: string) => {
-    await deleteContact(contactId);
-    // No need to manually update; the table re-renders with updated server-side props.
-  };
+  const handleDeleteClick = async (id: string | number) => {
+    await deleteContact(id);
+    setContacts((prevContacts) => prevContacts.filter(contact => contact.id !== id));
+  }
 
   const handleModalClose = () => {
     setEditingContact(null);
+    setIsAddModalOpen(false);
+  };
+
+  const handleAddClick = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleContactAdded = async (newContact: Contact) => {
+    await addContact(newContact);
+    setContacts((prevContacts) => [...prevContacts, newContact]);
   };
 
   return (
     <div>
+      <button onClick={handleAddClick}>Add Contact</button>
     <table border={1} style={{ width: '100%', marginTop: '1rem', textAlign: 'left' }}>
       <thead>
         <tr style={{display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)'}}>
@@ -63,6 +78,14 @@ const ContactTable: React.FC<ContactTableProps> = ({ contacts }) => {
           contact={editingContact}
           onClose={handleModalClose}
           onContactUpdated={()=> {}}
+          isAddMode={false}
+        />
+      )}
+
+      {isAddModalOpen && (
+        <AddContactModal
+          onClose={handleModalClose}
+          onContactAdded={handleContactAdded}
         />
       )}
     </div>

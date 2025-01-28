@@ -44,8 +44,7 @@ export const updateContact = (req: Request, res: Response) => {
 
 export const deleteContact = (req: Request, res: Response) => {
   const { id } = req.params;
-  const contactIndex = contacts.findIndex((contact) => contact.id === id);
-
+  const contactIndex = contacts.findIndex((contact) => contact.id == id);
   if (contactIndex !== -1) {
     contacts.splice(contactIndex, 1);
     res.status(200).json({ message: "Contact deleted successfully" });

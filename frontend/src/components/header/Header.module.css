@@ -1,0 +1,13 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: oklch(0.278 0.033 256.848);
+  color: white;
+  height: 3.93rem;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+}

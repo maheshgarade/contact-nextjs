@@ -22,7 +22,8 @@ export const updateContact = async (
   return response.data;
 };
 
-export const deleteContact = async (id: string): Promise<void> => {
+export const deleteContact = async (id: string | number): Promise<void> => {
+  console.log("id ", id);
   const response = await axios.delete(`${BASE_URL}/${id}`);
   return response.data;
 };

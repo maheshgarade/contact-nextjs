@@ -7,7 +7,6 @@ export default async function Home() {
   return (
     <main>
       <div style={{ padding: '1rem' }}>
-        <button>Add Contact</button>
         <ContactTable contacts={contacts} />
       </div>
     </main>

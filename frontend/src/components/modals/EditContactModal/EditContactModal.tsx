@@ -1,92 +1,56 @@
-'use client'
 import React, { useState } from 'react';
-import { Contact } from '../../../models/Contact';
-import { updateContact } from '../../../services/contactService';
+import { Contact } from '@/models/Contact';
+import styles from './EditContactModal.module.css'; // Import the CSS module
 
 interface EditContactModalProps {
-  contact: Contact;
+  contact: Contact | null;
   onClose: () => void;
   onContactUpdated: (updatedContact: Contact) => void;
+  isAddMode: boolean;
 }
 
-const EditContactModal: React.FC<EditContactModalProps> = ({ contact, onClose, onContactUpdated }) => {
-  const [formData, setFormData] = useState<Contact>({
-    id: contact.id,
-    name: contact.name,
-    phone: contact.phone,
-    email: contact.email,
-    access: contact.access,
-  });
+const EditContactModal: React.FC<EditContactModalProps> = ({ contact, onClose, onContactUpdated, isAddMode }) => {
+  const [name, setName] = useState(contact?.name || '');
+  const [email, setEmail] = useState(contact?.email || '');
+  const [phone, setPhone] = useState(contact?.phone || '');
+  const [access, setAccess] = useState(contact?.access || false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const updatedContact = await updateContact(contact.id, formData);
-      onContactUpdated(updatedContact);
-      onClose();
-    } catch (error) {
-      console.error('Error updating contact:', error);
-    }
+  const handleSave = () => {
+    const updatedContact = { ...contact, name, email, phone, access };
+    onContactUpdated(updatedContact as Contact);
+    onClose();
   };
 
   return (
-    <div style={{ padding: '1rem', backgroundColor: '#fff', borderRadius: '5px' }}>
-      <h2>Edit Contact</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
+    <div className={styles['modal-overlay']}>
+      <div className={styles['modal-content']}>
+        <div className={styles['modal-header']}>
+          <h2>{isAddMode ? 'Add Contact' : 'Edit Contact'}</h2>
+          <button onClick={onClose}>Close</button>
         </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Phone</label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            required
-          />
+        <div className={styles['modal-body']}>
+          <label>
+            Name:
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          </label>
+          <label>
+            Email:
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </label>
+          <label>
+            Phone:
+            <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </label>
+          <label>
+            Admin Access:
+            <input type="checkbox" checked={access as boolean} onChange={(e) => setAccess(e.target.checked)} />
+          </label>
         </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
+        <div className={styles['modal-footer']}>
+          <button onClick={onClose}>Cancel</button>
+          <button onClick={handleSave}>{isAddMode ? 'Add Contact' : 'Save Changes'}</button>
         </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Access</label>
-          <input
-            type="text"
-            name="access"
-            value={formData.access}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <button type="submit" style={{ marginRight: '1rem' }}>
-            Save
-          </button>
-          <button type="button" onClick={onClose}>
-            Cancel
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };

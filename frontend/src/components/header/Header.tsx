@@ -1,11 +1,12 @@
 import React from 'react';
 import Image from 'next/image'
+import styles from './Header.module.css'
 
 const Header: React.FC = () => {
   return (
-    <header style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: 'oklch(0.278 0.033 256.848)', color: 'white' }}>
+    <header className={styles.header}>
       <div className='flex'>
-        <Image src="logos/logo.svg" alt="Logo" width={34} height={34} />
+        <Image src="logos/logo.svg" alt="Logo" width={40} height={40} />
         <span style={{ marginLeft: '1rem', fontSize: '1.5rem', fontWeight: 'bold' }}>Contact Manager</span>
       </div>
       <div>
